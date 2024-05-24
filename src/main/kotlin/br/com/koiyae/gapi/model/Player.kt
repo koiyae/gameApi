@@ -1,5 +1,6 @@
 package br.com.koiyae.gapi.model
 
+import java.util.Scanner
 import kotlin.random.Random
 
 data class Player(var name: String, var email: String) {
@@ -14,6 +15,8 @@ data class Player(var name: String, var email: String) {
         }
     var internalId: String? = null
         private set
+
+    val searchedGames = mutableListOf<Game?>()
 
     constructor(
         name: String, email: String, birthDate: String, user: String
@@ -32,7 +35,7 @@ data class Player(var name: String, var email: String) {
 
 
     override fun toString(): String {
-        return "Gamer(nome='$name', email='$email', data de nascimento='$birthDate', usuário='$user, id interno='$internalId')"
+        return "Nome: $name\nE-mail: $email\nData de Nascimento: $birthDate\nUsuário: $user\nId interno: $internalId"
     }
 
     fun createInternalId() {
@@ -48,6 +51,28 @@ data class Player(var name: String, var email: String) {
             return email
         } else {
             throw IllegalArgumentException("Email inválido!")
+        }
+    }
+
+    companion object {
+        fun createPlayer(read: Scanner): Player {
+            print("Boas-vindas ao GameApi! Vamos fazer seu cadastro. Digite o seu nome: ")
+            val name = read.nextLine()
+            print("Digite seu e-mail: ")
+            val email = read.nextLine()
+            print("Deseja completar seu cadastro com usuário e data de nascimento? s/N ")
+            val option = read.nextLine()
+
+            if(option.equals("s", true)) {
+                print("Digite sua data de nascimento (DD/MM/AAAA): ")
+                val birth = read.nextLine()
+                print("Digite seu nome de usuário: ")
+                val user = read.nextLine()
+
+                return Player(name, email, birth, user)
+            } else {
+                return Player(name, email)
+            }
         }
     }
 }
